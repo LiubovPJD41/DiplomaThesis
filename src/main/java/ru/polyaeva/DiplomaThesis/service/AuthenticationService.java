@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.polyaeva.DiplomaThesis.dto.request.AuthenticationRQ;
-import ru.polyaeva.DiplomaThesis.dto.response.AuthenticationRS;
 import ru.polyaeva.DiplomaThesis.jwt.JwtTokenUtil;
 import ru.polyaeva.DiplomaThesis.repository.AuthenticationRepository;
 
@@ -22,7 +21,7 @@ public class AuthenticationService {
     private JwtTokenUtil jwtTokenUtil;
     private UserService userService;
 
-    public AuthenticationRS login(AuthenticationRQ authenticationRQ) {
+    public String login(AuthenticationRQ authenticationRQ) {
         final String username = authenticationRQ.getLogin();
         final String password = authenticationRQ.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -30,7 +29,7 @@ public class AuthenticationService {
         final String token = jwtTokenUtil.generateToken(userDetails);
         authenticationRepository.putTokenAndUsername(token, username);
         log.info("User {} authentication. JWT: {}", username, token);
-        return new AuthenticationRS(token);
+        return token;
     }
 
     public void logout(String authToken) {

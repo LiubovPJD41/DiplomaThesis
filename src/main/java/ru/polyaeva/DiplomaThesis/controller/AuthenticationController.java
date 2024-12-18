@@ -19,7 +19,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public AuthenticationRS login(@RequestBody AuthenticationRQ authenticationRQ) {
-        return authenticationService.login(authenticationRQ);
+        return new AuthenticationRS(authenticationService.login(authenticationRQ));
     }
 
     @PostMapping("/logout")
